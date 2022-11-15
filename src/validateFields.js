@@ -57,10 +57,11 @@ const checkTalk = async (req, res, next) => {
   const { rate, watchedAt } = talk;
   const regex = /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/i;
   const values = [1, 2, 3, 4, 5];
+  const valid = (param) => (!param && Number(param !== 0));
   if (!watchedAt) {
     return res.status(400).send({ message: 'O campo "watchedAt" é obrigatório' });
   }
-  if (!rate) return res.status(400).send({ message: 'O campo "rate" é obrigatório' });
+  if (valid(rate)) return res.status(400).send({ message: 'O campo "rate" é obrigatório' });
   if (!regex.test(watchedAt)) {
     return res.status(400).send({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
   } 

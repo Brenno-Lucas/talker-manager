@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { readTalker, user, writeTalker } = require('./utils');
+const { readTalker, user, writeTalker, attTalker } = require('./utils');
 const {
   checkEmail,
   checkPassword,
@@ -54,4 +54,16 @@ app.post('/talker',
   const talker = req.body;
   const data = await writeTalker(talker);
   return res.status(201).send(data);
+});
+
+app.put('/talker/:id',
+  checkAuthorization,
+  checkFields,
+  checkNameAndAge,
+  checkTalk,
+  async (req, res) => {
+  const { id } = req.params;
+  const talker = req.body;
+  const data = await attTalker(Number(id), talker);
+  return res.status(200).send(data);
 });

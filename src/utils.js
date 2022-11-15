@@ -32,4 +32,18 @@ const writeTalker = async (talker) => {
   return talk;
 };
 
-module.exports = { readTalker, user, writeTalker };
+const attTalker = async (id, talker) => {
+  const data = await readTalker();
+  const att = { id, ...talker };
+  const talkers = data.reduce((acc, param) => {
+    if (param.id === id) return [...acc, att];
+    return [...acc, param];
+  }, []);
+  await fs.writeFile(
+    path.resolve(__dirname, FILE_TALKER),
+    JSON.stringify(talkers),
+  );
+  return att;
+};
+
+module.exports = { readTalker, user, writeTalker, attTalker };
