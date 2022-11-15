@@ -1,7 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { readTalker, user } = require('./utils');
-const { checkEmail, checkPassword } = require('./validateFields');
+const { readTalker, user, writeTalker } = require('./utils');
+const {
+  checkEmail,
+  checkPassword,
+  checkAuthorization,
+  checkFields,
+  checkNameAndAge,
+  checkTalk,
+} = require('./validateFields');
 
 const app = express();
 app.use(bodyParser.json());
@@ -36,4 +43,15 @@ app.post('/login', checkEmail, checkPassword, async (req, res) => {
   const login = req.body;
   const { token } = await user(login);
   return res.status(200).send({ token });
+});
+
+app.post('/talker',
+  checkAuthorization,
+  checkFields,
+  checkNameAndAge,
+  checkTalk,
+  async (req, res) => {
+  const talker = req.body;
+  const data = await writeTalker(talker);
+  return res.status(201).send(data);
 });

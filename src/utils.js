@@ -18,4 +18,18 @@ const readTalker = async () => {
   return JSON.parse(data);
 };
 
-module.exports = { readTalker, user };
+const writeTalker = async (talker) => {
+  const data = await readTalker();
+  const talk = {
+    id: data.length + 1,
+    ...talker,
+  };
+  const talkers = [...data, talk];
+  await fs.writeFile(
+    path.resolve(__dirname, FILE_TALKER),
+    JSON.stringify(talkers),
+  );
+  return talk;
+};
+
+module.exports = { readTalker, user, writeTalker };
