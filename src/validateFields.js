@@ -1,3 +1,16 @@
+const { readTalker } = require('./utils');
+
+const checkID = async (req, res, next) => {
+  const { id } = req.params;
+  const data = await readTalker();
+  const arrID = data.reduce((acc, param) => [...acc, param.id], []);
+  if (!arrID.includes(Number(id))) {
+    return res.status(404)
+      .send({ message: 'Pessoa palestrante não encontrada' });
+  }
+  next();
+};
+
 const checkEmail = (req, res, next) => {
   const { body } = req;
   if (!body.email) {
@@ -78,4 +91,5 @@ module.exports = {
   checkFields,
   checkNameAndAge,
   checkTalk,
+  checkID,
 };

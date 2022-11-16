@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { readTalker, user, writeTalker, attTalker } = require('./utils');
+const { readTalker, user, writeTalker, attTalker, daleteTalker } = require('./utils');
 const {
+  checkID,
   checkEmail,
   checkPassword,
   checkAuthorization,
@@ -37,6 +38,12 @@ app.get('/talker/:id', async (req, res) => {
   const findFile = file.find((e) => e.id === Number(id));
   if (!findFile) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   res.status(200).json(findFile);
+});
+
+app.delete('/talker/:id', checkID, checkAuthorization, async (req, res) => {
+  const { id } = req.params;
+  await daleteTalker(Number(id));
+  return res.status(204).end();
 });
 
 app.post('/login', checkEmail, checkPassword, async (req, res) => {
